@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+stop () 
+{ 
+    docker-compose down
+}
+stop "$@"

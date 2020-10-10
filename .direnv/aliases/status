@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+status () 
+{ 
+    docker-compose ps
+}
+status "$@"

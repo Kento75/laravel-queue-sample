@@ -1,0 +1,48 @@
+version: '2'
+services:
+  # PHP + Laravel
+  queue-app:
+    container_name: laravel-queue
+    build:
+      dockerfile: Dockerfile
+      context: .
+    # systemctlの有効化
+    privileged: true
+    cap_add:
+      - SYS_ADMIN
+    security_opt:
+      - seccomp:unconfined
+    ports:
+      - '8080:80'
+      - '9011:9001'
+      - '22011:22'
+    volumes:
+      - './conf/php/custom-settings.ini:/etc/php.d/custom-settings.ini'
+      - './src/:/var/www/app/public'
+    networks:
+      - job-net
+
+  mysql:
+    container_name: mysql57-queue
+    image: mysql:5.7.31
+    environment:
+      MYSQL_USER: root
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: laravel
+    volumes:
+      - mysql-job-db:/var/lib/mysql
+    expose:
+      - '3306'
+    ports:
+      - '3306:3306'
+    networks:
+      - job-net
+
+volumes:
+  mysql-job-db:
+    driver: local
+
+networks:
+  job-net:
+    driver: bridge

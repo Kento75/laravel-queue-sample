@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+attach () 
+{ 
+    docker exec -it laravel-queue /bin/bash
+}
+attach "$@"
